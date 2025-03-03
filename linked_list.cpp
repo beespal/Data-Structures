@@ -1,6 +1,11 @@
 
 #include <iostream>
 
+/*
+Чтобы не было проблем в наследовании std::exception, пользуюсь стандартом c++20.
+Наверно можно и ниже. Но дефолтный ругается.
+*/
+
 class IndexError : public std::exception
 {
     std::string msg;
@@ -22,6 +27,14 @@ public:
     const char *what() const noexcept override { return msg.data(); }
 };
 
+/**
+ *Узел(элемент) списка.
+ *Реализовал через шаблон.
+ *@tparam T - тип данных которые будут храниться в переменной data.
+ *@params:
+ *data - переменная для хранения данных типа T
+ *next - ссылка на следующий элемент списка
+ **/
 template <typename T>
 class Node
 {
@@ -33,6 +46,9 @@ public:
     Node(T value = 0) : data(value), next(nullptr)
     {
     }
+    /*
+    Получить ссылку на следующий элемент
+    */
     Node *get_next()
     {
         return next;
@@ -41,12 +57,24 @@ public:
     {
         next = next_ptr;
     }
+    /*
+    Получить значение хранящееся в переменной data
+    */
     T get_data()
     {
         return data;
     }
 };
 
+/**
+ *Связанный список.
+ *Реализовал через шаблон.
+ *@tparam T - тип данных которые будут храниться в узле в переменной data.
+ *@params:
+ *head - ссылка на первый элемент списка
+ *tail - ссылка на последний элемент списка
+ *len - количество элементов в списке
+ **/
 template <typename T>
 class Linked_List
 {
@@ -57,10 +85,16 @@ class Linked_List
 
 public:
     Linked_List() {}
+    /*
+    Получить ссылку на начало списка
+    */
     Node<T> *get_head()
     {
         return head;
     }
+    /*
+    Поместить элемент в конец списка
+    */
     void push_back(T value)
     {
         Node<T> *curr = new Node<T>(value);
@@ -81,6 +115,9 @@ public:
         }
         len++;
     }
+    /*
+    Поместить элемент в начало списка
+    */
     void push_front(T value)
     {
         Node<T> *curr = new Node<T>(value);
@@ -96,10 +133,16 @@ public:
         }
         len++;
     }
+    /*
+    Получить количество элементов в списке
+    */
     unsigned get_size()
     {
         return len;
     }
+    /*
+    Получить значение элемента под индексом index
+    */
     T get_at_k(unsigned index)
     {
         if (index < 0 || index >= len)
@@ -115,6 +158,10 @@ public:
         }
         return curr->get_data();
     }
+    /*
+    Вставить элемент со значением value по индексу index.
+    Элемент который ранее был под индексом index(если он существовал) сдвинется вправо.
+    */
     void insert(unsigned index, T value)
     {
         if (index < 0)
@@ -144,6 +191,9 @@ public:
         }
         len++;
     }
+    /*
+    Удалить элемент из начала списка
+    */
     void pop_front()
     {
         if (!head)
@@ -164,6 +214,9 @@ public:
         }
         len--;
     }
+    /*
+    Удалить элемент под индексом index
+    */
     void erase(unsigned index)
     {
         if (!head)
@@ -196,12 +249,18 @@ public:
             len--;
         }
     }
+    /*
+    Удалить элемент из конца списка
+    */
     void pop_back()
     {
         erase(len - 1);
     }
 };
 
+/*
+Вспомагательная функция для печати в консоль элементов списка
+*/
 template <typename T>
 void print_linked_list(Linked_List<T> &list, std::string sep = " ")
 {
