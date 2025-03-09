@@ -25,6 +25,8 @@ public:
     {
         return root;
     }
+
+private:
     void add_node(T value, Node<T> *ptr)
     {
         if (value == ptr->data)
@@ -56,6 +58,8 @@ public:
             }
         }
     }
+
+public:
     void add(T value)
     {
         if (root == nullptr)
@@ -65,6 +69,8 @@ public:
         }
         add_node(value, root);
     }
+
+private:
     void show_node_depth(Node<T> *ptr)
     {
         if (ptr == nullptr)
@@ -75,9 +81,12 @@ public:
         std::cout << ptr->data << ' ';
         show_node_depth(ptr->right);
     }
+
+public:
     void show_tree_depth()
     {
         show_node_depth(root);
+        std::cout << std::endl;
     }
     void show_tree_width()
     {
@@ -96,5 +105,33 @@ public:
             std::cout << nodes.front()->data << ' ';
             nodes.pop_front();
         }
+        std::cout << std::endl;
+    }
+
+private:
+    bool _find_value_(T value, Node<T> *ptr)
+    {
+        if (ptr == nullptr)
+        {
+            return false;
+        }
+        else if (ptr->data == value)
+        {
+            return true;
+        }
+        else if (ptr->data < value)
+        {
+            return _find_value_(value, ptr->left);
+        }
+        else
+        {
+            return _find_value_(value, ptr->right);
+        }
+    }
+
+public:
+    bool find_value(T value)
+    {
+        return _find_value_(value, root);
     }
 };
